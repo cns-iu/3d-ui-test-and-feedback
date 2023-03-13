@@ -16,9 +16,10 @@ public class ChangeColorOnHover : MonoBehaviour
     /// /Trying for material color Instead
     /// </summary>
 
-    public XRRayInteractor xrRayInteractor;
+   // public XRRayInteractor xrRayInteractor;
+    [SerializeField] private XRSimpleInteractable _xrSimple;
     public float rayDistance = 100f;
-    public Color hoverColor = Color.red;
+    public Color hoverColor;
 
     public Material material;
     public Color originalColor;
@@ -49,31 +50,16 @@ public class ChangeColorOnHover : MonoBehaviour
      
 
     }
-    public void Update()
+    public void Awake()
     {
-        if (xrRayInteractor.gameObject.CompareTag("Menu Option"))
-        {
-            xrRayInteractor.hoverEntered.AddListener(OnHoverEnter);
-            xrRayInteractor.hoverExited.AddListener(OnHoverExit);
-        }
+        _xrSimple = GetComponent<XRSimpleInteractable>();
+
+        _xrSimple.hoverEntered.AddListener(OnHoverEnter);
+        _xrSimple.hoverExited.AddListener(OnHoverExit);
+        _xrSimple.activated.AddListener(PrintActivate);
+        
     }
 
-    private void OnDestroy()
-    {
-        //// Unregister the allowedHoveredActivate event on the XR Ray Interactor.
-        ///
-        //if (xrRayInteractor != null)
-        //{
-        //    xrRayInteractor.hoverEntered.RemoveListener(OnHoverEnter);
-        //    xrRayInteractor.hoverExited.RemoveListener(OnHoverExit);
-        //}
-
-        if (xrRayInteractor != null)
-        {
-            xrRayInteractor.hoverEntered.RemoveListener(OnHoverEnter);
-            xrRayInteractor.hoverExited.RemoveListener(OnHoverExit);
-        }
-    }
 
     //private void OnHoverEnter(HoverEnterEventArgs interactable)
     //{
@@ -86,18 +72,23 @@ public class ChangeColorOnHover : MonoBehaviour
     //    // Reset the color to the original color.
     //    image.color = originalColor;
     //}
-    private void OnHoverEnter(HoverEnterEventArgs interactable)
+    public void OnHoverEnter(HoverEnterEventArgs interactable)
     {
         // Change the color of the material to the hover color.
         material.color = hoverColor;
     }
 
-    private void OnHoverExit(HoverExitEventArgs interactable)
+    public void OnHoverExit(HoverExitEventArgs interactable)
     {
         // Reset the color to the original color.
         material.color = originalColor;
     }
 
+    public void PrintActivate (ActivateEventArgs interactable)
+    {
+        Debug.Log(interactable.interactorObject.transform.gameObject.name);
+        Debug.Log($"I am printed and my name is {gameObject.name}!!");
+    }
 
 }
 
