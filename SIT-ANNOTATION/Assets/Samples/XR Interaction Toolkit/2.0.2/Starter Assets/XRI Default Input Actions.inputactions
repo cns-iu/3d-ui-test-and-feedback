@@ -1073,6 +1073,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Custom",
+            "id": "aa2052a6-11e8-42a6-9c04-a36705ba6c1e",
+            "actions": [
+                {
+                    "name": "FloatBack",
+                    "type": "Button",
+                    "id": "15c35210-0dfb-41ce-9311-35709c7f43a9",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7637c54b-92a7-48a3-b0f6-d51ffa674ef8",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Generic XR Controller",
+                    "action": "FloatBack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

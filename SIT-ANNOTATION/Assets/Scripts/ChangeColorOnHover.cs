@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.InputSystem;
+using System;
 
 public class ChangeColorOnHover : MonoBehaviour
 {
@@ -18,11 +20,15 @@ public class ChangeColorOnHover : MonoBehaviour
 
    // public XRRayInteractor xrRayInteractor;
     [SerializeField] private XRSimpleInteractable _xrSimple;
+    [SerializeField] private InputActionReference activated;
     public float rayDistance = 100f;
     public Color hoverColor;
 
     public Material material;
     public Color originalColor;
+
+    public static event Action<GameState> OnRadialMenuOpen;
+    public static event Action<GameState> OnMotionSicknessReport;
 
 
     private void Start()
@@ -56,8 +62,18 @@ public class ChangeColorOnHover : MonoBehaviour
 
         _xrSimple.hoverEntered.AddListener(OnHoverEnter);
         _xrSimple.hoverExited.AddListener(OnHoverExit);
-        _xrSimple.activated.AddListener(PrintActivate);
-        
+        activated.action.performed += PrintActivate;
+
+
+        GameManager.OnGameStateChanged += OnStateSetActive;
+
+
+
+    }
+
+    void OnStateSetActive(GameState newState)
+    {
+        gameObject.SetActive(newState == GameState.ShowRadialMenu);
     }
 
 
@@ -76,6 +92,8 @@ public class ChangeColorOnHover : MonoBehaviour
     {
         // Change the color of the material to the hover color.
         material.color = hoverColor;
+        OnRadialMenuOpen?.Invoke(GameState.ShowRadialMenu);
+        OnMotionSicknessReport?.Invoke(GameState.ReportMotionSickness);
     }
 
     public void OnHoverExit(HoverExitEventArgs interactable)
@@ -84,9 +102,8 @@ public class ChangeColorOnHover : MonoBehaviour
         material.color = originalColor;
     }
 
-    public void PrintActivate (ActivateEventArgs interactable)
+    public void PrintActivate (InputAction.CallbackContext ctx)
     {
-        Debug.Log(interactable.interactorObject.transform.gameObject.name);
         Debug.Log($"I am printed and my name is {gameObject.name}!!");
     }
 

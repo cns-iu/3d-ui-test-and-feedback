@@ -5,6 +5,8 @@ using UnityEditor.Recorder;
 using UnityEditor.Recorder.Input;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.UI;
+using System;
+using System.Linq;
 
 public class RecordVideo : MonoBehaviour
 {
@@ -18,40 +20,78 @@ public class RecordVideo : MonoBehaviour
     Toggle m_Toggle;
     public Text m_Text;
 
+    [SerializeField] private bool _isRecording = false;
+
+    [SerializeField] private List<RecordVideo> _allRecorders;
+
+    RecorderControllerSettings controllerSettings;
+    RecorderController TestRecorderController;
 
     public void Start()
     {
         material = GetComponent<Renderer>().material;
         originalColor = material.color;
-
-
-
     }
 
     public void Awake()
     {
-        _xrSimple = GetComponent<XRSimpleInteractable>();
 
-        
-        _xrSimple.activated.AddListener(FirstclickToActivate);
+                _allRecorders = FindObjectsOfType<RecordVideo>().ToList<RecordVideo>();
+
+
+        controllerSettings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
+        TestRecorderController = new RecorderController(controllerSettings);
+
+        _xrSimple = GetComponent<XRSimpleInteractable>();        
+        _xrSimple.activated.AddListener(ClickToActivate);
+
+
 
     }
-    public void FirstclickToActivate(ActivateEventArgs interactable)
+
+    public void ClickToActivate(ActivateEventArgs interactable)
     {
-        material.color = activateColor;
-        //start recording
-        //toggle value changed or state chaged (maybe tag on the mesh)
+        if (interactable.interactableObject.transform.gameObject != this) return;
+
+        foreach (var section in _allRecorders)
+        {
+            if (section != this.GetComponent<RecordVideo>())
+            {
+
+                section.gameObject.GetComponent<XRSimpleInteractable>().enabled = false;
+                section.gameObject.GetComponent<RecordVideo>().enabled = false;
+            }
+        }
+
+        if (!_isRecording)
+        {
+            _isRecording = true;
+            Debug.Log("recording");
+            material.color = activateColor;
+            StartRecording();
+            //toggle value changed or state chaged (maybe tag on the mesh)
+        }
+        else {
+            _isRecording = false;
+            Debug.Log("stopped recording");
+            material.color = originalColor;
+            StopRecording();
+
+
+            //changes made since last meeting
+
+            foreach (var section in _allRecorders)
+            {
+                section.gameObject.GetComponent<XRSimpleInteractable>().enabled = true;
+                section.gameObject.GetComponent<RecordVideo>().enabled = true;
+            }
+
+
+            // //toggle value changed or state chaged (maybe tag on the mesh)
+        }
+       
 
     }
-
-    public void SecondClickToDeactivate(ActivateEventArgs interactable)
-    {
-        material.color = originalColor;
-        //stop recording
-        // //toggle value changed or state chaged (maybe tag on the mesh)
-
-    }
-
 
     //void OnEnable()
     //{
@@ -86,8 +126,8 @@ public class RecordVideo : MonoBehaviour
 
     public void StartRecording()
     {
-        var controllerSettings = ScriptableObject.CreateInstance<RecorderControllerSettings>();
-        var TestRecorderController = new RecorderController(controllerSettings);
+      
+
 
         var videoRecorder = ScriptableObject.CreateInstance<MovieRecorderSettings>();
         videoRecorder.name = "My Video Recorder";
@@ -106,7 +146,7 @@ public class RecordVideo : MonoBehaviour
         videoRecorder.OutputFile = "G:\\My Drive\\Capstone\\Videos\\testrecording1";
 
         controllerSettings.AddRecorderSettings(videoRecorder);
-        controllerSettings.SetRecordModeToFrameInterval(0, 59); // 2s @ 30 FPS  // ask andi about 2s videos??
+        controllerSettings.SetRecordModeToFrameInterval(0, 9999); // 2s @ 30 FPS  // ask andi about 2s videos??
         controllerSettings.FrameRate = 30;
 
         RecorderOptions.VerboseMode = false;
@@ -118,7 +158,7 @@ public class RecordVideo : MonoBehaviour
     public void StopRecording()
     //  public void StopRecording(RecorderController.?)
     {
-       // TestRecorderController.stopRecording();
+       TestRecorderController.StopRecording();
     }
 
 
