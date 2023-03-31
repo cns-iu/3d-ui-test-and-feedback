@@ -8,11 +8,12 @@ public class Buzzer : MonoBehaviour
 {
     public int taskNumber;
     public static event Action<int> OnTaskFinished;
-    private Slider _slider;
+    [SerializeField] private Slider _slider;
+    [SerializeField] private float _duration = 2f;
 
     private void OnCollisionEnter(Collision collision)
     {
-        StartCoroutine(CountDown(2f));
+        StartCoroutine(CountDown(_duration));
     }
 
     IEnumerator CountDown(float duration)
@@ -21,7 +22,7 @@ public class Buzzer : MonoBehaviour
         while (elapsedTime <= duration)
         {
             elapsedTime += Time.deltaTime;
-            _slider.
+            _slider.value = elapsedTime / duration;
             yield return null;
         }
         OnTaskFinished?.Invoke(taskNumber);

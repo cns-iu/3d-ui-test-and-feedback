@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     public GameState state;
     public Condition condition;
     public int currentTaskNumber = 0;
+    public int totalNumberTasks = 3;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -46,6 +47,14 @@ public class GameManager : MonoBehaviour
 
     void HandleTaskFinished(int oldTaskNumber) {
         currentTaskNumber = oldTaskNumber + 1;
+        if (currentTaskNumber > totalNumberTasks)
+        {
+            //turn off logging and end application, play end message
+        }
+        else
+        {
+            //load new scene
+        }
     }
 
     public void UpdateGameState(GameState newstate)
