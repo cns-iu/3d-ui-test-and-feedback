@@ -11,7 +11,6 @@ public enum GameState
     ReportMotionSickness,
     FinishScreenANT,
     FinishScreenSIT,
-
 }
 
 
@@ -21,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     public GameState state;
     public Condition condition;
+    public int currentTaskNumber = 0;
 
     public static event Action<GameState> OnGameStateChanged;
 
@@ -34,12 +34,18 @@ public class GameManager : MonoBehaviour
     {
         ChangeColorOnHover.OnRadialMenuOpen += UpdateGameState;
         ChangeColorOnHover.OnMotionSicknessReport += UpdateGameState;
+        Buzzer.OnTaskFinished += HandleTaskFinished;
     }
 
     private void OnDestroy()
     {
         ChangeColorOnHover.OnRadialMenuOpen -= UpdateGameState;
         ChangeColorOnHover.OnMotionSicknessReport -= UpdateGameState;
+        Buzzer.OnTaskFinished -= HandleTaskFinished;
+    }
+
+    void HandleTaskFinished(int oldTaskNumber) {
+        currentTaskNumber = oldTaskNumber + 1;
     }
 
     public void UpdateGameState(GameState newstate)
