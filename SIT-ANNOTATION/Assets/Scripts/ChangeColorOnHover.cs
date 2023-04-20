@@ -62,7 +62,7 @@ public class ChangeColorOnHover : MonoBehaviour
 
         _xrSimple.hoverEntered.AddListener(OnHoverEnter);
         _xrSimple.hoverExited.AddListener(OnHoverExit);
-        activated.action.performed += PrintActivate;
+        //activated.action.performed += PrintActivate;
 
 
         GameManager.OnGameStateChanged += OnStateSetActive;

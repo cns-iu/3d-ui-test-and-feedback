@@ -53,6 +53,7 @@ public class RecordVideo : MonoBehaviour
     {
         if (interactable.interactableObject.transform.gameObject != this) return;
 
+
         foreach (var section in _allRecorders)
         {
             if (section != this.GetComponent<RecordVideo>())
@@ -143,11 +144,11 @@ public class RecordVideo : MonoBehaviour
         videoRecorder.AudioInputSettings.PreserveAudio = true;
 
         // define the path of the save file
-        videoRecorder.OutputFile = "G:\\My Drive\\Capstone\\Videos\\testrecording1";
+        videoRecorder.OutputFile = "G:\\My Drive\\Capstone\\Videos\\" + "{DateTime.Now:yyyyMMdd_HHmmss}" ;
 
         controllerSettings.AddRecorderSettings(videoRecorder);
-        controllerSettings.SetRecordModeToFrameInterval(0, 9999); // 2s @ 30 FPS  // ask andi about 2s videos??
-        controllerSettings.FrameRate = 30;
+        controllerSettings.SetRecordModeToFrameInterval(0, 99999); // 2s @ 30 FPS  // ask andi about 2s videos??
+        controllerSettings.FrameRate = 60;
 
         RecorderOptions.VerboseMode = false;
         TestRecorderController.PrepareRecording();
@@ -161,7 +162,7 @@ public class RecordVideo : MonoBehaviour
        TestRecorderController.StopRecording();
     }
 
-
+    
 }
 
     

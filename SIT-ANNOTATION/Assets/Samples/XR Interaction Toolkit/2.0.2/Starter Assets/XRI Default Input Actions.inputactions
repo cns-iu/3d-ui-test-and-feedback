@@ -278,6 +278,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "toggle",
+                    "type": "Button",
+                    "id": "d7516375-a6d3-4b9e-af27-3b8a1a22d07f",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -456,6 +465,17 @@
                     "action": "Translate Anchor",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "35e8d8bf-3674-4764-9ce0-f0c296edfca6",
+                    "path": "<XRController>{LeftHand}/secondaryButton",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": "",
+                    "action": "toggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -1086,6 +1106,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DrawOnTrigger",
+                    "type": "Button",
+                    "id": "d91048df-1777-4632-9e05-4c2e4847cc22",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -1097,6 +1126,17 @@
                     "processors": "",
                     "groups": "Generic XR Controller",
                     "action": "FloatBack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "498f20db-6daf-4127-b315-308491a9c87b",
+                    "path": "<XRController>{RightHand}/triggerPressed",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DrawOnTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
