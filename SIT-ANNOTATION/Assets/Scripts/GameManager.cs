@@ -16,7 +16,7 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
     public GameState state;
     public Condition condition;
@@ -28,7 +28,16 @@ public class GameManager : MonoBehaviour
 
     public void Awake()
     {
-        Instance = this;
+        // If there is an instance, and it's not me, delete myself.
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
     }
 
     private void OnEnable()
@@ -36,6 +45,7 @@ public class GameManager : MonoBehaviour
         ChangeColorOnHover.OnRadialMenuOpen += UpdateGameState;
         ChangeColorOnHover.OnMotionSicknessReport += UpdateGameState;
         Buzzer.OnTaskFinished += HandleTaskFinished;
+        ToggleObject.OnToggled += UpdateGameState;
     }
 
     private void OnDestroy()
@@ -45,7 +55,8 @@ public class GameManager : MonoBehaviour
         Buzzer.OnTaskFinished -= HandleTaskFinished;
     }
 
-    void HandleTaskFinished(int oldTaskNumber) {
+    void HandleTaskFinished(int oldTaskNumber)
+    {
         currentTaskNumber = oldTaskNumber + 1;
         if (currentTaskNumber > totalNumberTasks)
         {
@@ -61,7 +72,7 @@ public class GameManager : MonoBehaviour
     {
         state = newstate;
 
-       
+
         switch (newstate)
         {
             case GameState.TutorialMenu:
@@ -90,12 +101,13 @@ public class GameManager : MonoBehaviour
 
     private void HandleTutorialMenu()
     {
-        
+
     }
 
-  
-    public enum Condition { 
-    ANT, 
-    SIT
+
+    public enum Condition
+    {
+        ANT,
+        SIT
     }
 }

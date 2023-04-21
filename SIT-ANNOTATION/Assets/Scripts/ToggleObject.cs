@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR.Interaction.Toolkit;
+using System;
 
 public class ToggleObject : MonoBehaviour
 {
+    public static event Action<GameState> OnToggled;
+
     [SerializeField] private GameObject toggleObject;
     [SerializeField] private InputActionReference joystickButtonClick;
 
@@ -42,5 +45,15 @@ public class ToggleObject : MonoBehaviour
     {
         isObjectEnabled = !isObjectEnabled;
         toggleObject.SetActive(isObjectEnabled);
+
+        if (isObjectEnabled)
+        {
+            OnToggled?.Invoke(GameState.ShowRadialMenu);
+        }
+        else
+        {
+            OnToggled?.Invoke(GameState.DefaultState);
+        }
+       
     }
 }

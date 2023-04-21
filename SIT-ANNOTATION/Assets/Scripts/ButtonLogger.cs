@@ -10,6 +10,8 @@ using System.Text;
 
 public class ButtonLogger : MonoBehaviour
 {
+    public ButtonLogger Instance { get; private set; }
+
     [SerializeField] private List<InputActionReference> _buttons = new List<InputActionReference>();
 
 
@@ -41,6 +43,20 @@ public class ButtonLogger : MonoBehaviour
     private string _currentRadialSection;
     private string currentSectionPressed;
 
+    private void Awake()
+    {
+        // If there is an instance, and it's not me, delete myself.
+
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
     private void OnEnable()
     {
 
@@ -57,11 +73,13 @@ public class ButtonLogger : MonoBehaviour
         }
     }
 
-    private void CaptureSection(ActivateEventArgs args) {
-        currentSectionPressed= args.interactableObject.transform.gameObject.GetComponent<RadialSection>().Type.ToString();
+    private void CaptureSection(ActivateEventArgs args)
+    {
+        currentSectionPressed = args.interactableObject.transform.gameObject.GetComponent<RadialSection>().Type.ToString();
     }
 
-    private void CaptureButton(InputAction.CallbackContext ctx) {
+    private void CaptureButton(InputAction.CallbackContext ctx)
+    {
         _currentButtonPressed = ctx.action.name;
 
         //ButtonEvent?.Invoke(ctx.action.name);
@@ -103,7 +121,7 @@ public class ButtonLogger : MonoBehaviour
 
     void OnDestroy()
     {
-       
+
         // Close the CSV file when the script is destroyed
         csvWriter.Close();
     }
